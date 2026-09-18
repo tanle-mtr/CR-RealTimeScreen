@@ -1,0 +1,467 @@
+/* 国铁车站信息屏 - 复刻CRSim大屏样式 */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* 背景色 */
+    --bg-primary: #000000;
+    --bg-row-alt: #0a0a0a;
+    --bg-header: #000000;
+    
+    /* 文字颜色 */
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    --text-dim: #888888;
+    
+    /* 车次颜色（CRSim默认配置） */
+    --train-g: #ff00ff;      /* 高铁G - 洋红 Magenta */
+    --train-d: #4682b4;      /* 动车D - 钢蓝 SteelBlue */
+    --train-c: #008080;      /* 城际C - 青色 Teal */
+    --train-t: #0000ff;      /* 特快T - 蓝色 Blue */
+    --train-z: #8b4513;      /* 直达Z - 鞍棕 SaddleBrown */
+    --train-k: #ff0000;      /* 快速K - 红色 Red */
+    --train-l: #00ff00;      /* 临客L - 绿色 Green */
+    --train-default: #00ff00; /* 默认 - 绿色 Green */
+    
+    /* 状态颜色 */
+    --status-normal: #ffffff;
+    --status-early: #90ee90;     /* 早点 - 浅绿 */
+    --status-delay: #ff0000;     /* 晚点 - 红色 */
+    --status-checkin: #90ee90;   /* 检票中 - 浅绿 */
+    --status-stop: #ff0000;      /* 停止检票 - 红色 */
+    --status-arrived: #90ee90;   /* 已到达 - 浅绿 */
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: "Microsoft YaHei", "SimHei", "PingFang SC", sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== 主屏幕容器 ===== */
+.screen {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 30px;
+    position: relative;
+}
+
+/* ===== 顶部标题栏 ===== */
+.screen-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #333;
+    margin-bottom: 10px;
+}
+
+.header-left {
+    flex: 1;
+}
+
+.screen-title {
+    font-size: 48px;
+    font-weight: bold;
+    color: var(--text-primary);
+    letter-spacing: 8px;
+}
+
+.header-right {
+    text-align: right;
+}
+
+.screen-time {
+    font-size: 42px;
+    font-weight: bold;
+    color: var(--text-primary);
+    font-family: "Consolas", "DIN Alternate", monospace;
+    line-height: 1;
+    letter-spacing: 2px;
+}
+
+.screen-date {
+    font-size: 18px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+/* ===== 车次表格 ===== */
+.train-board {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.board-header {
+    display: grid;
+    grid-template-columns: 0.6fr 1fr 1.2fr 1.2fr 1fr 1fr 1fr;
+    border-bottom: 1px solid #444;
+    padding-bottom: 8px;
+    margin-bottom: 5px;
+}
+
+.col {
+    text-align: center;
+    font-size: 20px;
+    color: var(--text-secondary);
+    font-weight: normal;
+}
+
+.col-no { text-align: center; }
+.col-train { text-align: left; padding-left: 20px; }
+.col-from { text-align: center; }
+.col-to { text-align: center; }
+.col-arrive { text-align: center; }
+.col-depart { text-align: center; }
+.col-status { text-align: center; }
+
+.board-body {
+    flex: 1;
+    overflow: hidden;
+}
+
+/* 车次行 */
+.train-row {
+    display: grid;
+    grid-template-columns: 0.6fr 1fr 1.2fr 1.2fr 1fr 1fr 1fr;
+    align-items: center;
+    border-bottom: 1px solid #222;
+    transition: background 0.3s;
+}
+
+.train-row:nth-child(even) {
+    background: var(--bg-row-alt);
+}
+
+.train-row .col {
+    font-size: 26px;
+    padding: 8px 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+}
+
+.train-row .col-no {
+    font-size: 20px;
+    color: var(--text-dim);
+}
+
+.train-row .col-train {
+    justify-content: flex-start;
+    padding-left: 20px;
+}
+
+/* 车次号样式 */
+.train-code {
+    font-size: 32px;
+    font-weight: bold;
+    font-family: "Consolas", "DIN Alternate", monospace;
+    letter-spacing: 1px;
+}
+
+.train-code.g { color: var(--train-g); }
+.train-code.d { color: var(--train-d); }
+.train-code.c { color: var(--train-c); }
+.train-code.t { color: var(--train-t); }
+.train-code.z { color: var(--train-z); }
+.train-code.k { color: var(--train-k); }
+.train-code.y { color: var(--train-k); }
+.train-code.l { color: var(--train-l); }
+.train-code.default { color: var(--train-default); }
+
+/* 车站名称 */
+.station-name {
+    font-size: 26px;
+    color: var(--text-primary);
+}
+
+/* 时间 */
+.time-value {
+    font-size: 30px;
+    font-weight: bold;
+    font-family: "Consolas", "DIN Alternate", monospace;
+    color: var(--text-primary);
+    letter-spacing: 1px;
+}
+
+.time-value.departure {
+    color: #ffff00;
+}
+
+/* 状态标签 */
+.status-text {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.status-normal { color: var(--status-normal); }
+.status-early { color: var(--status-early); }
+.status-delay { color: var(--status-delay); }
+.status-checkin { color: var(--status-checkin); }
+.status-stop { color: var(--status-stop); }
+.status-arrived { color: var(--status-arrived); }
+
+/* ===== 加载与错误 ===== */
+.loading-overlay, .error-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 100;
+}
+
+.loading-text {
+    font-size: 28px;
+    color: var(--text-secondary);
+}
+
+.error-overlay {
+    color: var(--status-delay);
+    font-size: 24px;
+    text-align: center;
+    padding: 40px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ===== 控制栏 ===== */
+.control-bar {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    opacity: 0.3;
+    transition: opacity 0.3s;
+    z-index: 500;
+}
+
+.control-bar:hover {
+    opacity: 1;
+}
+
+.ctrl-btn {
+    padding: 8px 16px;
+    background: #333;
+    border: 1px solid #555;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.ctrl-btn:hover {
+    background: #444;
+}
+
+/* ===== 设置面板 ===== */
+.settings-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.settings-content {
+    background: #1a1a1a;
+    padding: 32px;
+    border-radius: 8px;
+    width: 420px;
+    border: 1px solid #444;
+}
+
+.settings-content h2 {
+    margin-bottom: 24px;
+    color: #fff;
+    font-size: 24px;
+}
+
+.setting-item {
+    margin-bottom: 20px;
+}
+
+.setting-item label {
+    display: block;
+    margin-bottom: 8px;
+    color: #aaa;
+    font-size: 14px;
+}
+
+.setting-item input[type="text"],
+.setting-item input[type="number"] {
+    width: 100%;
+    padding: 10px 12px;
+    background: #000;
+    border: 1px solid #444;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
+}
+
+.station-search {
+    position: relative;
+}
+
+.suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #1a1a1a;
+    border: 1px solid #444;
+    border-top: none;
+    max-height: 240px;
+    overflow-y: auto;
+    z-index: 10;
+    border-radius: 0 0 4px 4px;
+}
+
+.suggestion-item {
+    padding: 10px 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+}
+
+.suggestion-item:hover {
+    background: #333;
+}
+
+.suggestion-code {
+    color: #666;
+    font-family: "Consolas", monospace;
+}
+
+.setting-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 24px;
+}
+
+.btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: #1976d2;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #1565c0;
+}
+
+.btn {
+    background: #333;
+    color: #fff;
+}
+
+.btn:hover {
+    background: #444;
+}
+
+/* 滚动条 */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #111;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #444;
+}
+
+/* ===== 响应式 ===== */
+@media (max-width: 1600px) {
+    .screen-title { font-size: 36px; }
+    .screen-time { font-size: 32px; }
+    .col { font-size: 16px; }
+    .train-code { font-size: 26px; }
+    .station-name { font-size: 20px; }
+    .time-value { font-size: 24px; }
+    .status-text { font-size: 18px; }
+    .train-row .col { padding: 6px 4px; }
+}
+
+@media (max-width: 1200px) {
+    .screen-title { font-size: 28px; letter-spacing: 4px; }
+    .screen-time { font-size: 26px; }
+    .screen-date { font-size: 14px; }
+    .col { font-size: 14px; }
+    .train-code { font-size: 22px; }
+    .station-name { font-size: 18px; }
+    .time-value { font-size: 20px; }
+    .status-text { font-size: 16px; }
+}
+
+/* ===== 三级地区选择器 ===== */
+.region-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.region-select {
+    width: 100%;
+    padding: 8px 10px;
+    background: #000;
+    border: 1px solid #444;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+}
+
+.region-select:focus {
+    border-color: #1976d2;
+}
+
+.region-select option {
+    background: #1a1a1a;
+    color: #fff;
+}
+
+.region-select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+"}]
