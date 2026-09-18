@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>车站信息屏</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- 设置面板 -->
+    <div id="settings-panel" class="settings-panel hidden">
+        <div class="settings-content">
+            <h2>设置</h2>
+            <div class="setting-item">
+                <label>选择车站（按地区筛选）：</label>
+                <div class="region-selector">
+                    <select id="province-select" class="region-select">
+                        <option value="">-- 选择省份 --</option>
+                    </select>
+                    <select id="city-select" class="region-select">
+                        <option value="">-- 选择城市 --</option>
+                    </select>
+                    <select id="station-select" class="region-select">
+                        <option value="">-- 选择车站 --</option>
+                    </select>
+                </div>
+                <div class="station-search" style="margin-top: 12px;">
+                    <input type="text" id="station-search-input" placeholder="或直接搜索车站名称" autocomplete="off">
+                    <div id="station-suggestions" class="suggestions hidden"></div>
+                </div>
+            </div>
+            <div class="setting-item">
+                <label>自动刷新间隔（秒）：</label>
+                <input type="number" id="refresh-interval" value="60" min="10" max="300">
+            </div>
+            <div class="setting-actions">
+                <button id="btn-apply" class="btn btn-primary">应用</button>
+                <button id="btn-cancel" class="btn">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主信息屏 -->
+    <div class="screen">
+        <!-- 顶部标题栏 -->
+        <div class="screen-header">
+            <div class="header-left">
+                <span class="screen-title" id="station-name">车站</span>
+            </div>
+            <div class="header-right">
+                <span class="screen-time" id="current-time">00:00:00</span>
+                <span class="screen-date" id="current-date">2024年1月1日 星期</span>
+            </div>
+        </div>
+
+        <!-- 车次表格 -->
+        <div class="train-board">
+            <!-- 表头 -->
+            <div class="board-header">
+                <div class="col col-no">序号</div>
+                <div class="col col-train">车次</div>
+                <div class="col col-from">始发站</div>
+                <div class="col col-to">终到站</div>
+                <div class="col col-arrive">到达时间</div>
+                <div class="col col-depart">发车时间</div>
+                <div class="col col-status">状态</div>
+            </div>
+            <!-- 表格内容 -->
+            <div id="train-list" class="board-body">
+            </div>
+        </div>
+
+        <!-- 加载提示 -->
+        <div id="loading" class="loading-overlay">
+            <div class="loading-text">正在加载...</div>
+        </div>
+
+        <!-- 错误提示 -->
+        <div id="error-msg" class="error-overlay hidden"></div>
+    </div>
+
+    <!-- 控制按钮（悬浮，默认隐藏） -->
+    <div class="control-bar" id="control-bar">
+        <button id="btn-settings" class="ctrl-btn" title="设置">⚙ 设置</button>
+        <button id="btn-fullscreen" class="ctrl-btn" title="全屏">⛶ 全屏</button>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
+"}]
